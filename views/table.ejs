@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%= tableName %></title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <h1><%= tableName %></h1>
+    <table>
+        <thead>
+            <tr>
+                <% columns.forEach(function(col) { %>
+                    <th><%= col %></th>
+                <% }); %>
+            </tr>
+        </thead>
+        <tbody>
+            <% rows.forEach(function(row) { %>
+                <tr>
+                    <% columns.forEach(function(col) { %>
+                        <td><%= row[col] %></td>
+                    <% }); %>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+    <a href="/">Back to tables</a>
+</body>
+</html>

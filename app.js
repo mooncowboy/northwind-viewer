@@ -1,49 +1,56 @@
+
 const express = require('express');
+const path = require('path');
+const db = require('./db');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Routes
+// Set EJS as the view engine
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
+// Serve static files from public
+app.use(express.static(path.join(__dirname, 'public')));
+
+// List of tables (hardcoded for now, could be dynamic)
+const tables = [
+  'Categories',
+  'CustomerCustomerDemo',
+  'CustomerDemographics',
+  'Customers',
+  'Employees',
+  'EmployeeTerritories',
+  'Order Details',
+  'Orders',
+  'Products',
+  'Regions',
+  'Shippers',
+  'Suppliers',
+  'Territories'
+];
+
+// Home page: list all tables
 app.get('/', (req, res) => {
-  res.send(`
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <title>Northwind Viewer</title>
-      <style>
-        body {
-          font-family: Arial, sans-serif;
-          max-width: 800px;
-          margin: 0 auto;
-          padding: 40px 20px;
-          text-align: center;
-          background-color: #f5f5f5;
-        }
-        .container {
-          background-color: white;
-          padding: 40px;
-          border-radius: 10px;
-          box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        h1 {
-          color: #333;
-          margin-bottom: 20px;
-        }
-        p {
-          color: #666;
-          font-size: 18px;
-          line-height: 1.6;
-        }
-      </style>
-    </head>
-    <body>
-      <div class="container">
-        <h1>Welcome to Northwind Viewer!</h1>
-        <p>A simple Node.js Express application for the Northwind database.</p>
-      </div>
-    </body>
-    </html>
-  `);
+  res.render('index', { tables });
+});
+
+// Table view: show all rows for a table (limit 100)
+app.get('/:table', (req, res, next) => {
+  const tableName = req.params.table;
+  if (!tables.includes(tableName)) {
+    return res.status(404).send('Table not found');
+  }
+  // Special case for "Order Details" (space in name)
+  const sqlTable = tableName === 'Order Details' ? '"Order Details"' : tableName;
+  db.all(`PRAGMA table_info(${sqlTable})`, (err, columns) => {
+    if (err) return next(err);
+    const colNames = columns.map(col => col.name);
+    db.all(`SELECT * FROM ${sqlTable} LIMIT 100`, (err, rows) => {
+      if (err) return next(err);
+      res.render('table', { tableName, columns: colNames, rows });
+    });
+  });
 });
 
 // Start server
