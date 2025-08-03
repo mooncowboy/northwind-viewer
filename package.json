@@ -1,0 +1,33 @@
+{
+  "name": "northwind-viewer",
+  "version": "1.0.0",
+  "main": "app.js",
+  "description": "A Node.js Express application for viewing Northwind database",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mooncowboy/northwind-viewer.git"
+  },
+  "keywords": [
+    "express",
+    "nodejs",
+    "northwind",
+    "database"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mooncowboy/northwind-viewer/issues"
+  },
+  "homepage": "https://github.com/mooncowboy/northwind-viewer#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
