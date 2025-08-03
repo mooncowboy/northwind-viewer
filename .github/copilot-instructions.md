@@ -1,0 +1,1 @@
+When asked about database schema or data, use the mcp-sqlite mcp server.
